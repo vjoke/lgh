@@ -1,0 +1,26 @@
+{
+  "name": "lgh",
+  "owner": {
+    "name": "vjoke"
+  },
+  "metadata": {
+    "description": "High-Performance Go Programming patterns from VictoriaMetrics",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "lgh",
+      "source": "./",
+      "description": "Patterns and guidelines for writing high-performance Go code from VictoriaMetrics",
+      "version": "1.0.0",
+      "author": {
+        "name": "vjoke"
+      },
+      "keywords": ["go", "performance", "optimization", "victoriametrics"],
+      "category": "programming",
+      "homepage": "https://github.com/vjoke/lgh",
+      "repository": "https://github.com/vjoke/lgh",
+      "license": "MIT"
+    }
+  ]
+}
