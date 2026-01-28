@@ -1,0 +1,18 @@
+{
+  "name": "lgh",
+  "version": "1.0.0",
+  "description": "High-Performance Go Programming patterns and best practices",
+  "author": {
+    "name": "lgh"
+  },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/VictoriaMetrics/VictoriaMetrics",
+  "keywords": [
+    "go",
+    "performance",
+    "optimization",
+    "memory",
+    "concurrency",
+    "victoriametrics"
+  ]
+}
