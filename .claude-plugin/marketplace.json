@@ -20,7 +20,7 @@
       "category": "programming",
       "homepage": "https://github.com/vjoke/lgh",
       "repository": "https://github.com/vjoke/lgh",
-      "license": "MIT"
+      "license": "Apache-2.0"
     }
   ]
 }
