@@ -13,6 +13,9 @@
     "optimization",
     "memory",
     "concurrency",
-    "victoriametrics"
+    "victoriametrics",
+    "migration",
+    "gitlab",
+    "meitu"
   ]
 }
