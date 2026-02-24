@@ -76,11 +76,32 @@ echo ")" >> go.mod
 rm -f go.sum
 ```
 
-### Step 4: Update CI
+### Step 4: Update CI and Scripts
 
 ```bash
-sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' .gitlab-ci.yml
+# Update .gitlab-ci.yml
 sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' .gitlab-ci.yml
+
+# Update git config - keep old domain and add new domain
+sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' .gitlab-ci.yml
+
+# Update other URLs
+sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' .gitlab-ci.yml
+
+# Update shell scripts
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' {} \;
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' {} \;
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' {} \;
+
+# Update Makefile
+if [ -f "Makefile" ]; then
+    sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' Makefile
+    sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' Makefile
+    sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' Makefile
+fi
 ```
 
 ### Step 5: Update Imports
@@ -162,17 +183,92 @@ echo "Import paths updated."
 
 {{else if eq (index $ARGUMENTS 0) "ci"}}
 
-## Update .gitlab-ci.yml
+## Update .gitlab-ci.yml and Scripts
 
 ```bash
-# Update paths
+# Update .gitlab-ci.yml
+sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' .gitlab-ci.yml
+sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' .gitlab-ci.yml
 sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' .gitlab-ci.yml
 
-# Update GOPRIVATE
-sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' .gitlab-ci.yml
+# Update shell scripts
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' {} \;
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' {} \;
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' {} \;
 
-echo ".gitlab-ci.yml updated. Preview:"
-head -30 .gitlab-ci.yml
+# Update Makefile
+if [ -f "Makefile" ]; then
+    sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' Makefile
+    sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' Makefile
+    sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' Makefile
+fi
+
+echo "CI and scripts updated."
+```
+
+{{else if eq (index $ARGUMENTS 0) "scripts"}}
+
+## Update Scripts with GOPRIVATE/Git Config
+
+Auto-discover and update all scripts:
+
+```bash
+# Update .gitlab-ci.yml
+sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' .gitlab-ci.yml
+sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' .gitlab-ci.yml
+sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' .gitlab-ci.yml
+
+# Update shell scripts
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' {} \;
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' {} \;
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' {} \;
+
+# Update Makefile
+if [ -f "Makefile" ]; then
+    sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' Makefile
+    sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' Makefile
+    sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' Makefile
+fi
+
+# Update other CI configs
+for file in .ci/*.yml .ci/*.yaml scripts/*.yml deploy/*.yml; do
+    [ -f "$file" ] && sed -i '' 's|GOPRIVATE=.*|GOPRIVATE=git.meitu.com,gitlab.meitu.com|g' "$file"
+    [ -f "$file" ] && sed -i '' 's|git config --global url."\([^"]*\)@gitlab.meitu.com/"|git config --global url."\1@gitlab.meitu.com/"\n    git config --global url."\1@git.meitu.com/"|g' "$file"
+    [ -f "$file" ] && sed -i '' 's|gitlab.meitu.com/|git.meitu.com/|g' "$file"
+done
+
+echo "Scripts updated."
+```
+
+{{else if eq (index $ARGUMENTS 0) "discover"}}
+
+## Discover Files with GOPRIVATE/Git Config
+
+```bash
+echo "=== Files containing GOPRIVATE or git config ==="
+
+# Search in .gitlab-ci.yml
+grep -l "GOPRIVATE\|git config" .gitlab-ci.yml 2>/dev/null && echo "  - .gitlab-ci.yml"
+
+# Search in shell scripts
+find . -name "*.sh" -type f ! -path "./vendor/*" ! -path "./.git/*" -exec \
+    grep -l "GOPRIVATE\|git config" {} \; 2>/dev/null | sed 's/^/  - /'
+
+# Search in Makefile
+[ -f "Makefile" ] && grep -l "GOPRIVATE\|git config" Makefile 2>/dev/null && echo "  - Makefile"
+
+# Search in other CI configs
+for pattern in ".ci/*.yml" ".ci/*.yaml" "scripts/*.yml" "scripts/*.yaml"; do
+    for file in $pattern; do
+        [ -f "$file" ] && grep -l "GOPRIVATE\|git config" "$file" 2>/dev/null && echo "  - $file"
+    done
+done
 ```
 
 {{else if eq (index $ARGUMENTS 0) "verify"}}
@@ -263,7 +359,9 @@ import (
 /lgh:migrate-gitlab analyze      # Analyze current project
 /lgh:migrate-gitlab gomod        # Update go.mod only
 /lgh:migrate-gitlab imports      # Update import paths only
-/lgh:migrate-gitlab ci           # Update .gitlab-ci.yml only
+/lgh:migrate-gitlab ci           # Update .gitlab-ci.yml and scripts
+/lgh:migrate-gitlab scripts      # Update all scripts with GOPRIVATE/git config
+/lgh:migrate-gitlab discover     # Discover files with GOPRIVATE/git config
 /lgh:migrate-gitlab verify       # Run go mod tidy and build
 ```
 
